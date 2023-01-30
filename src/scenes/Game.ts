@@ -4,7 +4,11 @@ import { Player } from "../prefabs/Player";
 import Scene from "../core/Scene";
 import { Sprite } from "pixi.js";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
-import { centerObjects, recenterSpriteInParent, recenterSpritesFullScreen } from "../utils/misc";
+import {
+  centerObjects,
+  recenterSpriteInParent,
+  recenterSpritesFullScreen,
+} from "../utils/misc";
 import { Debug } from "../utils/debug";
 import { Handle } from "../prefabs/Handle";
 
@@ -18,7 +22,8 @@ export default class Game extends Scene {
   private keypad: KeypadDisplayText | undefined;
   private handle: Handle | undefined;
 
-  load() {
+  async load() {
+    // await this.utils.assetLoader.loadAssetsGroup("Game");
     /* this.background = new ParallaxBackground(config.backgrounds.forest);
     this.player = new Player();
 
@@ -44,6 +49,10 @@ export default class Game extends Scene {
     this.handle = new Handle();
     door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
+  }
+
+  async start() {
+    await this.utils.assetLoader.loadAssetsGroup("End");
   }
 
   onResize(width: number, height: number) {

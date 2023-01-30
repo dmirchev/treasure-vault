@@ -2,6 +2,8 @@ import { Graphics, Point, Sprite, Ticker } from "pixi.js";
 import Mouse from "../core/Mouse";
 import { Debug } from "../utils/debug";
 import "@pixi/math-extras";
+import SceneManager from "../core/SceneManager";
+import { switchScene } from "../main";
 
 type Rotation = {
   normilizedDirection: Point;
@@ -69,6 +71,8 @@ export class Handle extends Sprite {
   onActionRelease(action: keyof typeof Mouse.actions, position: Point) {
     if (action == "PRIMARY") {
       //   Debug.log(`${action}: ${position}`);
+
+      switchScene("End");
     }
   }
 
