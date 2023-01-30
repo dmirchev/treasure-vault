@@ -1,5 +1,6 @@
-import { Sprite, Ticker } from "pixi.js";
+import { Point, Sprite, Ticker } from "pixi.js";
 import Mouse from "../core/Mouse";
+import { Debug } from "../utils/debug";
 
 export class Handle extends Sprite {
   private mouse = Mouse.getInstance();
@@ -24,6 +25,24 @@ export class Handle extends Sprite {
     this.addChild(this.shadow, this.handle);
 
     // this.starting();
+
+    this.mouse.onAction(({ action, buttonState, position }) => {
+      if (buttonState === "pressed") this.onActionPress(action, position);
+      else if (buttonState === "drag") this.onActionDrag(action, position);
+      else if (buttonState === "released") this.onActionRelease(action, position);
+    });
+  }
+
+  private onActionPress(action: keyof typeof Mouse.actions, position: Point) {
+    Debug.log(`${action}: ${position}`);
+  }
+
+  onActionDrag(action: keyof typeof Mouse.actions, position: Point) {
+    Debug.log(`${action}: ${position}`);
+  }
+
+  onActionRelease(action: keyof typeof Mouse.actions, position: Point) {
+    Debug.log(`${action}: ${position}`);
   }
 
   starting() {
