@@ -1,29 +1,30 @@
-import { Sprite, Text } from "pixi.js";
+import { Sprite } from "pixi.js";
 import Scene from "../core/Scene";
-import { centerObjects } from "../utils/misc";
+import KeypadDisplayText from "../prefabs/KeypadDisplayText";
+import { centerObjects, recenterSpritesFullScreen } from "../utils/misc";
 
 export default class Loading extends Scene {
   name = "Loading";
 
+  private bg: Sprite | undefined;
+
   async load() {
     await this.utils.assetLoader.loadAssetsGroup("Loading");
 
-    const bg = Sprite.from("bgNight");
+    this.bg = Sprite.from("vault");
+    new KeypadDisplayText("Load", this.bg);
 
-    const text = new Text("Loading...", {
-      fontFamily: "Verdana",
-      fontSize: 50,
-      fill: "white",
-    });
+    centerObjects(this.bg);
+    recenterSpritesFullScreen(this.bg);
 
-    text.resolution = 2;
-
-    centerObjects(bg, text);
-
-    this.addChild(bg, text);
+    this.addChild(this.bg);
   }
 
   async start() {
     await this.utils.assetLoader.loadAssetsGroup("Game");
+  }
+
+  onResize() {
+    if (this.bg) recenterSpritesFullScreen(this.bg);
   }
 }
