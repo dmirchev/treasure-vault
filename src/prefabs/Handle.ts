@@ -1,6 +1,12 @@
-import { Point, Sprite, Ticker } from "pixi.js";
+import { Graphics, Point, Sprite, Ticker } from "pixi.js";
 import Mouse from "../core/Mouse";
 import { Debug } from "../utils/debug";
+import "@pixi/math-extras";
+
+type Rotation = {
+  normilizedDirection: Point;
+  angle: number;
+};
 
 export class Handle extends Sprite {
   private mouse = Mouse.getInstance();
@@ -10,6 +16,8 @@ export class Handle extends Sprite {
     return this.handle;
   }
   shadow: Sprite;
+
+  handleRotation: Rotation | undefined;
 
   constructor() {
     super();
@@ -24,31 +32,64 @@ export class Handle extends Sprite {
 
     this.addChild(this.shadow, this.handle);
 
-    // this.starting();
-
     this.mouse.onAction(({ action, buttonState, position }) => {
       if (buttonState === "pressed") this.onActionPress(action, position);
       else if (buttonState === "drag") this.onActionDrag(action, position);
-      else if (buttonState === "released") this.onActionRelease(action, position);
+      else if (buttonState === "released")
+        this.onActionRelease(action, position);
     });
   }
 
   private onActionPress(action: keyof typeof Mouse.actions, position: Point) {
-    Debug.log(`${action}: ${position}`);
+    if (action == "PRIMARY") {
+      const magnitude = this.handle.getBounds().height * 0.5;
+      const pointFromCenterToInputPositiom =
+        this.getDirectionFromCenterToPosition(position);
+
+      // If Pressing on the Hande
+      if (pointFromCenterToInputPositiom.magnitude() <= magnitude) {
+        this.handleRotation = {
+          normilizedDirection: pointFromCenterToInputPositiom.normalize(),
+          angle:
+            this.calculateAngle(pointFromCenterToInputPositiom) -
+            this.handle.rotation,
+        };
+      }
+    }
   }
 
   onActionDrag(action: keyof typeof Mouse.actions, position: Point) {
-    Debug.log(`${action}: ${position}`);
+    if (action == "PRIMARY") {
+      this.updateRotation(
+        this.calculateAngle(this.getDirectionFromCenterToPosition(position))
+      );
+    }
   }
 
   onActionRelease(action: keyof typeof Mouse.actions, position: Point) {
-    Debug.log(`${action}: ${position}`);
+    if (action == "PRIMARY") {
+      //   Debug.log(`${action}: ${position}`);
+    }
   }
 
-  starting() {
-    Ticker.shared.add((delta) => {
-      this.handle.angle += delta;
-      this.shadow.angle += delta;
-    });
+  getHandleGlobalCenterPoint(): Point {
+    return this.handle.toGlobal(this.handle.position);
+  }
+
+  getDirectionFromCenterToPosition(position: Point): Point {
+    const centerGlobal = this.getHandleGlobalCenterPoint();
+    return position.subtract(centerGlobal);
+  }
+
+  calculateAngle(direction: Point): number {
+    const normilizedDirection = direction.normalize();
+    return Math.atan2(normilizedDirection.y, normilizedDirection.x);
+  }
+
+  updateRotation(angle: number) {
+    const finalAngle =
+      angle - (this.handleRotation ? this.handleRotation.angle : 0);
+    this.handle.rotation = finalAngle;
+    this.shadow.rotation = finalAngle;
   }
 }

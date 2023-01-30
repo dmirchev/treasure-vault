@@ -19,6 +19,7 @@
     "vite": "^4.0.4"
   },
   "dependencies": {
+    "@pixi/math-extras": "^7.1.1",
     "@pixi/sound": "^5.0.0",
     "gsap": "^3.11.4",
     "pixi.js": "^7.1.1"
