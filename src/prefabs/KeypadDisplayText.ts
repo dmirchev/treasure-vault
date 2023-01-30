@@ -1,4 +1,5 @@
 import { Sprite, Text } from "pixi.js";
+import { recenterSpriteInParent } from "../utils/misc";
 
 export default class KeypadDisplayText extends Text {
   constructor(text: string, parent: Sprite) {
@@ -12,8 +13,6 @@ export default class KeypadDisplayText extends Text {
 
     this.setParent(parent);
 
-    this.anchor.set(0.5);
-    this.x = -(this.parent as Sprite).texture.width * 0.196;
-    this.y = -(this.parent as Sprite).texture.height * 0.05;
+    recenterSpriteInParent(this, -0.196, -0.05);
   }
 }

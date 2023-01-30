@@ -35,6 +35,16 @@ export function recenterSpritesFullScreen(...sprites: Sprite[]) {
   sprites.forEach(recenter);
 }
 
+export function recenterSpriteInParent(
+  sprite: Sprite,
+  xOffsetPercent: number,
+  yOffsetPercent: number
+) {
+  sprite.anchor.set(0.5);
+  sprite.x = (sprite.parent as Sprite).texture.width * xOffsetPercent;
+  sprite.y = (sprite.parent as Sprite).texture.height * yOffsetPercent;
+}
+
 export function wait(seconds: number) {
   return new Promise<void>((res) => setTimeout(res, seconds * 1000));
 }
