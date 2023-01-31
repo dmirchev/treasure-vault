@@ -1,7 +1,7 @@
 import { Sprite } from "pixi.js";
 import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
-import { Debug } from "../utils/debug";
+import { Sparkles } from "../prefabs/Sparkles";
 import {
   centerObjects,
   recenterSpriteInParent,
@@ -19,6 +19,11 @@ export default class End extends Scene {
     this.bg = Sprite.from("bg");
     new KeypadDisplayText("NICE", this.bg);
 
+    centerObjects(this.bg);
+    recenterSpritesFullScreen(this.bg);
+
+    this.addChild(this.bg);
+
     this.doorOpenShadow = Sprite.from("doorOpenShadow");
     this.bg.addChild(this.doorOpenShadow);
     recenterSpriteInParent(this.doorOpenShadow, 0.26, 0.005);
@@ -27,10 +32,7 @@ export default class End extends Scene {
     this.doorOpenShadow.addChild(this.doorOpen);
     recenterSpriteInParent(this.doorOpen, -0.05, -0.02);
 
-    centerObjects(this.bg);
-    recenterSpritesFullScreen(this.bg);
-
-    this.addChild(this.bg);
+    new Sparkles(this.bg, "blink");
   }
 
   onResize() {

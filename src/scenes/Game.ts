@@ -1,4 +1,3 @@
-import config from "../config";
 import ParallaxBackground from "../prefabs/ParallaxBackground";
 import { Player } from "../prefabs/Player";
 import Scene from "../core/Scene";
@@ -9,7 +8,6 @@ import {
   recenterSpriteInParent,
   recenterSpritesFullScreen,
 } from "../utils/misc";
-import { Debug } from "../utils/debug";
 import { Handle } from "../prefabs/Handle";
 
 export default class Game extends Scene {
