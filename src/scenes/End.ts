@@ -2,10 +2,13 @@ import { Sprite } from "pixi.js";
 import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
 import { Sparkles } from "../prefabs/Sparkles";
+import { alphaTween } from "../utils/animationmisc";
+import { Debug } from "../utils/debug";
 import {
   centerObjects,
   recenterSpriteInParent,
   recenterSpritesFullScreen,
+  wait,
 } from "../utils/misc";
 
 export default class End extends Scene {
@@ -35,12 +38,20 @@ export default class End extends Scene {
     recenterSpriteInParent(this.doorOpen, -0.05, -0.02);
 
     this.goldSparkles = new Sparkles(this.bg, "blink");
+
+    alphaTween(0, 1, this.doorOpenShadow, () =>
+      wait(2).then(() =>
+        alphaTween(1, 0, this.doorOpenShadow, () =>
+          this.sceneManager.switchScene("Game")
+        )
+      )
+    );
   }
 
   onResize() {
     if (this.bg) {
       recenterSpritesFullScreen(this.bg);
-      this.sceneManager.switchScene("Game");
+      // this.sceneManager.switchScene("Game");
     }
   }
 

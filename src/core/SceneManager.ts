@@ -15,6 +15,7 @@ export default class SceneManager {
   app: Application;
   sceneInstances = new Map<string, Scene>();
   currentScene?: Scene;
+  lastSceneName: string | undefined;
 
   constructor() {
     this.app = new Application({
@@ -53,6 +54,8 @@ export default class SceneManager {
   }
 
   async switchScene(sceneName: string, deletePrevious = true): Promise<Scene> {
+    this.lastSceneName = this.currentScene ? this.currentScene.name : "";
+
     await this.removeScene(deletePrevious);
 
     this.currentScene = this.sceneInstances.get(sceneName);

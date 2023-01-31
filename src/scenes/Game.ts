@@ -9,6 +9,8 @@ import {
   recenterSpritesFullScreen,
 } from "../utils/misc";
 import { Handle } from "../prefabs/Handle";
+import { alphaTween } from "../utils/animationmisc";
+import { Debug } from "../utils/debug";
 
 export default class Game extends Scene {
   name = "Game";
@@ -18,6 +20,7 @@ export default class Game extends Scene {
 
   private bg: Sprite | undefined;
   private keypad: KeypadDisplayText | undefined;
+  private door: Sprite | undefined;
   private handle: Handle | undefined;
 
   async load() {
@@ -40,13 +43,16 @@ export default class Game extends Scene {
 
     this.addChild(this.bg);
 
-    const door = Sprite.from("door");
-    this.bg.addChild(door);
-    recenterSpriteInParent(door, 0.009, -0.012);
+    this.door = Sprite.from("door");
+    this.bg.addChild(this.door);
+    recenterSpriteInParent(this.door, 0.009, -0.012);
 
     this.handle = new Handle();
-    door.addChild(this.handle);
+    this.door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
+
+    Debug.log(this.sceneManager.lastSceneName);
+    if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
   }
 
   async unload() {
@@ -55,5 +61,7 @@ export default class Game extends Scene {
 
   onResize(width: number, height: number) {
     if (this.bg) recenterSpritesFullScreen(this.bg);
+    if (this.door)
+      alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
   }
 }
