@@ -15,6 +15,8 @@ export default class End extends Scene {
   private doorOpen: Sprite | undefined;
   private doorOpenShadow: Sprite | undefined;
 
+  private goldSparkles: Sparkles | undefined;
+
   async load() {
     this.bg = Sprite.from("bg");
     new KeypadDisplayText("NICE", this.bg);
@@ -32,10 +34,17 @@ export default class End extends Scene {
     this.doorOpenShadow.addChild(this.doorOpen);
     recenterSpriteInParent(this.doorOpen, -0.05, -0.02);
 
-    new Sparkles(this.bg, "blink");
+    this.goldSparkles = new Sparkles(this.bg, "blink");
   }
 
   onResize() {
-    if (this.bg) recenterSpritesFullScreen(this.bg);
+    if (this.bg) {
+      recenterSpritesFullScreen(this.bg);
+      this.sceneManager.switchScene("Game");
+    }
+  }
+
+  update(delta: number) {
+    if (this.goldSparkles) this.goldSparkles.update(delta);
   }
 }

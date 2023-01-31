@@ -49,20 +49,11 @@ export default class Game extends Scene {
     recenterSpriteInParent(this.handle, -0.04, -0.01);
   }
 
-  async start() {
-    await this.utils.assetLoader.loadAssetsGroup("End");
+  async unload() {
+    if (this.handle) this.handle.unload();
   }
 
   onResize(width: number, height: number) {
-    /* if (this.player) {
-      this.player.x = width / 2;
-      this.player.y = height - this.player.height / 3;
-    }
-
-    if (this.background) {
-      this.background.resize(width, height);
-    } */
-
     if (this.bg) recenterSpritesFullScreen(this.bg);
   }
 }

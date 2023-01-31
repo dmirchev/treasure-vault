@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Ticker } from "pixi.js";
 import Scene from "./Scene";
 import { Debug } from "../utils/debug";
 import AssetLoader from "./AssetLoader";
@@ -29,6 +29,10 @@ export default class SceneManager {
       const target = ev.target as Window;
 
       this.currentScene?.onResize?.(target.innerWidth, target.innerHeight);
+    });
+
+    Ticker.shared.add((delta) => {
+      this.currentScene?.update?.(delta);
     });
   }
 
@@ -86,7 +90,7 @@ export default class SceneManager {
       assetLoader: new AssetLoader(),
     };
 
-    const scene = new this.sceneConstructors[sceneName](sceneUtils);
+    const scene = new this.sceneConstructors[sceneName](this, sceneUtils);
 
     this.sceneInstances.set(sceneName, scene);
 

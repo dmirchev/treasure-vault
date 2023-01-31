@@ -22,6 +22,7 @@ export default class Loading extends Scene {
 
   async start() {
     await this.utils.assetLoader.loadAssetsGroup("Game");
+    await this.utils.assetLoader.loadAssetsGroup("End");
   }
 
   onResize() {

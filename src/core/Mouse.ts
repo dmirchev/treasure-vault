@@ -61,6 +61,10 @@ export default class Mouse extends utils.EventEmitter {
     this.on(Mouse.states.ACTION, callback);
   }
 
+  public offAction() {
+    this.removeAllListeners();
+  }
+
   private onMousePress(button: number, position: Point): void {
     if (this.isKeyDown(button) || !(button in Mouse.keyActionMap)) return;
 

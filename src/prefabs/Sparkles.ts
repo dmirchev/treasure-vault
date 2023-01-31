@@ -1,5 +1,6 @@
 import { Emitter, EmitterConfigV3 } from "@pixi/particle-emitter";
 import { Container, Texture, Ticker } from "pixi.js";
+import { Debug } from "../utils/debug";
 
 export class Sparkles extends Container {
   private emitter: Emitter | undefined;
@@ -96,9 +97,9 @@ export class Sparkles extends Container {
     this.emitter = new Emitter(parent, emitterConfig);
 
     this.emitter.emit = true;
+  }
 
-    Ticker.shared.add((delta) => {
-      if (this.emitter) this.emitter.update(delta);
-    });
+  update(delta: number) {
+    if (this.emitter) this.emitter.update(delta);
   }
 }
