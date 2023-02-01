@@ -192,15 +192,18 @@ export class Handle extends Sprite {
     this.shadow.rotation = angle;
   }
 
-  public startCrazySpin(callback?: (() => void) | undefined) {
+  public startCrazySpin(
+    direction: number,
+    callback?: (() => void) | undefined
+  ) {
     this.hasPressed = false;
     this.interactive = false;
 
-    const crazySpinStartRotation = 2 * (Math.PI * 10);
+    const crazySpinStartRotation = direction * 2 * (Math.PI * 10);
     const duration = 3;
 
     rotationTween(
-      this.handle.rotation - crazySpinStartRotation,
+      direction * this.handle.rotation - crazySpinStartRotation,
       0,
       duration,
       this.handle,
@@ -208,7 +211,7 @@ export class Handle extends Sprite {
     );
 
     rotationTween(
-      this.shadow.rotation - crazySpinStartRotation,
+      direction * this.shadow.rotation - crazySpinStartRotation,
       0,
       duration,
       this.shadow

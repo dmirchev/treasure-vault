@@ -24,6 +24,8 @@ export default class Game extends Scene {
 
   private timer: Timer | undefined;
 
+  private isReady: boolean | undefined;
+
   async load() {
     this.bg = Sprite.from("bg");
     this.keypad = new KeypadDisplayText("00:00", this.bg);
@@ -46,7 +48,7 @@ export default class Game extends Scene {
     this.combinationManager = new CombinationManager(3, 1, 9);
     this.timer = new Timer();
 
-    if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
+    this.isReady = false;
   }
 
   init() {
@@ -55,10 +57,16 @@ export default class Game extends Scene {
     this.handle?.Init();
     this.combinationManager?.setSequence();
     this.timer?.resetTime();
+
+    this.isReady = true;
   }
 
   async start() {
-    this.init();
+    if (this.sceneManager.lastSceneName === "End")
+      alphaTween(0, 1, this.door, () =>
+        this.handle?.startCrazySpin(1, () => this.init())
+      );
+    else this.init();
   }
 
   async unload() {
@@ -70,15 +78,17 @@ export default class Game extends Scene {
   }
 
   update() {
-    if (this.keypad) this.keypad.text = this.timer ? this.timer?.getTime() : "";
+    if (this.keypad)
+      this.keypad.text =
+        this.isReady && this.timer ? this.timer?.getTime() : "";
   }
 
   onHandleSegmentClick(direction: number) {
     if (
       this.combinationManager?.checkSequence(
         direction,
-        () => this.handle?.startCrazySpin(() => this.onCombinationFail()),
-        () => this.handle?.startCrazySpin(() => this.onCombinationSuccess())
+        () => this.handle?.startCrazySpin(1, () => this.onCombinationFail()),
+        () => this.handle?.startCrazySpin(-1, () => this.onCombinationSuccess())
       )
     ) {
       this.handle?.forceStop();
