@@ -47,8 +47,7 @@ export class Handle extends Sprite {
     this.mouse.onAction(({ action, buttonState, position }) => {
       if (buttonState === "pressed") this.onActionPress(action, position);
       else if (buttonState === "drag") this.onActionDrag(action, position);
-      else if (buttonState === "released")
-        this.onActionRelease(action, position);
+      else if (buttonState === "released") this.onActionRelease(action);
     });
 
     this.segmentAngle = Math.PI / 3;
@@ -155,12 +154,9 @@ export class Handle extends Sprite {
     this.mouse.offAction();
   }
 
-  onActionRelease(action: keyof typeof Mouse.actions, position: Point) {
+  onActionRelease(action: keyof typeof Mouse.actions) {
     if (action == "PRIMARY") {
       this.hasPressed = false;
-      //   Debug.log(`${action}: ${position}`);
-      // switchScene("End");
-
       this.addToAccumulatedAngle();
     }
   }

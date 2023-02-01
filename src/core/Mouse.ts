@@ -34,9 +34,15 @@ export default class Mouse extends utils.EventEmitter {
   }
 
   private listenToKeyEvents() {
-    document.addEventListener("mousedown", (e) => this.onMousePress(e.button, new Point(e.x, e.y)));
-    document.addEventListener("mousemove", (e) => this.onMouseDrag(e.button, new Point(e.x, e.y)));
-    document.addEventListener("mouseup", (e) => this.onMouseRelease(e.button, new Point(e.x, e.y)));
+    document.addEventListener("mousedown", (e) =>
+      this.onMousePress(e.button, new Point(e.x, e.y))
+    );
+    document.addEventListener("mousemove", (e) =>
+      this.onMouseDrag(e.button, new Point(e.x, e.y))
+    );
+    document.addEventListener("mouseup", (e) =>
+      this.onMouseRelease(e.button, new Point(e.x, e.y))
+    );
   }
 
   public static getInstance(): Mouse {

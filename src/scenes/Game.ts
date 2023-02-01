@@ -1,5 +1,3 @@
-import ParallaxBackground from "../prefabs/ParallaxBackground";
-import { Player } from "../prefabs/Player";
 import Scene from "../core/Scene";
 import { Sprite } from "pixi.js";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
@@ -10,16 +8,12 @@ import {
 } from "../utils/misc";
 import { Handle } from "../prefabs/Handle";
 import { alphaTween } from "../utils/animationmisc";
-import { Debug } from "../utils/debug";
 import CombinationManager from "../core/CombinationManager";
 import { Timer } from "../prefabs/Timer";
 import { sound } from "@pixi/sound";
 
 export default class Game extends Scene {
   name = "Game";
-
-  private player: Player | undefined;
-  private background: ParallaxBackground | undefined;
 
   private bg: Sprite | undefined;
   private keypad: KeypadDisplayText | undefined;
@@ -31,17 +25,6 @@ export default class Game extends Scene {
   private timer: Timer | undefined;
 
   async load() {
-    // await this.utils.assetLoader.loadAssetsGroup("Game");
-    /* this.background = new ParallaxBackground(config.backgrounds.forest);
-    this.player = new Player();
-
-    this.player.x = window.innerWidth / 2;
-    this.player.y = window.innerHeight - this.player.height / 3;
-
-    this.background.initPlayerMovement(this.player);
-
-    this.addChild(this.background, this.player); */
-
     this.bg = Sprite.from("bg");
     this.keypad = new KeypadDisplayText("00:00", this.bg);
 
@@ -60,7 +43,7 @@ export default class Game extends Scene {
     this.door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
 
-    this.combinationManager = new CombinationManager(1, 1, 9);
+    this.combinationManager = new CombinationManager(3, 1, 9);
     this.timer = new Timer();
 
     if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
@@ -68,6 +51,7 @@ export default class Game extends Scene {
 
   init() {
     sound.play("lock");
+
     this.handle?.Init();
     this.combinationManager?.setSequence();
     this.timer?.resetTime();
@@ -81,11 +65,11 @@ export default class Game extends Scene {
     if (this.handle) this.handle.unload();
   }
 
-  onResize(width: number, height: number) {
+  onResize() {
     if (this.bg) recenterSpritesFullScreen(this.bg);
   }
 
-  update(delta: number) {
+  update() {
     if (this.keypad) this.keypad.text = this.timer ? this.timer?.getTime() : "";
   }
 
