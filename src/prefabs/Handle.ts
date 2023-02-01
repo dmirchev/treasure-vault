@@ -1,18 +1,12 @@
 import { Point, Sprite } from "pixi.js";
 import Mouse from "../core/Mouse";
 import "@pixi/math-extras";
-import { Debug } from "../utils/debug";
 import {
   angleBetweenVectors,
   calculateAngle,
   calculateVector,
   inverseTransform,
 } from "../utils/mathmisc";
-
-export enum Directions {
-  LEFT = -1,
-  RIGHT = 1,
-}
 
 export class Handle extends Sprite {
   private mouse = Mouse.getInstance();
@@ -33,9 +27,9 @@ export class Handle extends Sprite {
   currentSegment = 0;
   currentSegmentAngle = 0;
 
-  onSegmentClickCallback: (() => boolean) | undefined;
+  onSegmentClickCallback: ((direction: number) => void) | undefined;
 
-  constructor(callback?: (() => boolean) | undefined) {
+  constructor(callback?: ((direction: number) => void) | undefined) {
     super();
 
     this.handle = Sprite.from("handle");
@@ -73,6 +67,8 @@ export class Handle extends Sprite {
 
     this.currentSegment = 0;
     this.currentSegmentAngle = 0;
+
+    this.updateHandleRotation(0);
   }
 
   unload() {
@@ -112,6 +108,8 @@ export class Handle extends Sprite {
           this.pressedPoint
         ).normalize();
 
+        this.rotateHandle(positionNormal);
+
         // Angle Between the Pressed Vector and the Dragged Vector
         const angle = angleBetweenVectors(pressedPointNormal, positionNormal);
 
@@ -140,24 +138,16 @@ export class Handle extends Sprite {
             this.currentSegmentAngle / this.segmentAngle
           );
 
-          // Debug.log(this.currentSegment);
-
-          if (this.onSegmentClickCallback) {
-            if (this.onSegmentClickCallback()) {
-              this.hasPressed = false;
-              this.mouse.offAction();
-            }
-          }
+          if (this.onSegmentClickCallback)
+            this.onSegmentClickCallback(rotaionDirection);
         }
-
-        // Sprite Rotation Angle
-        const dragedAngle = calculateAngle(positionNormal);
-        const diff = dragedAngle - this.pressedAngle;
-
-        // diff can be above PI
-        this.updateHandleRotation(calculateAngle(calculateVector(diff)));
       }
     }
+  }
+
+  forceStop() {
+    this.hasPressed = false;
+    this.mouse.offAction();
   }
 
   onActionRelease(action: keyof typeof Mouse.actions, position: Point) {
@@ -185,6 +175,15 @@ export class Handle extends Sprite {
 
   inverseTransformToHandle(position: Point) {
     return inverseTransform(position, this.handle);
+  }
+
+  rotateHandle(positionNormal: Point) {
+    // Sprite Rotation Angle
+    const dragedAngle = calculateAngle(positionNormal);
+    const diff = dragedAngle - this.pressedAngle;
+
+    // diff can be above PI
+    this.updateHandleRotation(calculateAngle(calculateVector(diff)));
   }
 
   updateHandleRotation(angle: number) {

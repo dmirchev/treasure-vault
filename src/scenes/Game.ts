@@ -11,6 +11,7 @@ import {
 import { Handle } from "../prefabs/Handle";
 import { alphaTween } from "../utils/animationmisc";
 import { Debug } from "../utils/debug";
+import CombinationManager from "../core/CombinationManager";
 
 export default class Game extends Scene {
   name = "Game";
@@ -22,6 +23,8 @@ export default class Game extends Scene {
   private keypad: KeypadDisplayText | undefined;
   private door: Sprite | undefined;
   private handle: Handle | undefined;
+
+  private combinationManager: CombinationManager | undefined;
 
   async load() {
     // await this.utils.assetLoader.loadAssetsGroup("Game");
@@ -47,11 +50,15 @@ export default class Game extends Scene {
     this.bg.addChild(this.door);
     recenterSpriteInParent(this.door, 0.009, -0.012);
 
-    this.handle = new Handle(() => this.onHandleSegmentClick());
+    this.handle = new Handle((direction: number) =>
+      this.onHandleSegmentClick(direction)
+    );
     this.door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
 
-    Debug.log(this.sceneManager.lastSceneName);
+    this.combinationManager = new CombinationManager(3, 1, 9);
+    this.combinationManager.setSequence();
+
     if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
   }
 
@@ -63,10 +70,24 @@ export default class Game extends Scene {
     if (this.bg) recenterSpritesFullScreen(this.bg);
   }
 
-  onHandleSegmentClick() {
-    return false;
-    // if (this.door) {
-    //   alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
-    // }
+  onHandleSegmentClick(direction: number) {
+    if (
+      this.combinationManager?.checkSequence(
+        direction,
+        () => this.onCombinationFail(),
+        () => this.onCombinationSuccess()
+      )
+    ) {
+      this.handle?.forceStop();
+    }
+  }
+
+  onCombinationFail() {
+    this.handle?.Init();
+    this.combinationManager?.setSequence();
+  }
+
+  onCombinationSuccess() {
+    alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
   }
 }
