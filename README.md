@@ -1,25 +1,25 @@
-## 🎮 Simple 2D Game Framework for [PixiJS](https://pixijs.com) using [Vite⚡](https://vitejs.dev/)
+## 🎮 Treasure Vault 2D Game made with [PixiJS](https://pixijs.com) using [Vite⚡](https://vitejs.dev/)
 
-<a href="https://pixi-framework.up.railway.app/" target="_blank">Demo</a>
+## How to play 🕸
 
-### Highlights 🌟
+- Open the Development Tools on your Browser and opne the Console
+- You will see the correct combination to open the Vault
+  - `CW - clockwise rotation`
+  - `CCW - counterclockwise rotation`
+- Click on the Handle and Drag in a Rotating Motion
+- You `Win` upon dialing the correct sequence and the Vault door opens
+- You `Lose` when you diale in an incorrect rotation
 
-- Typescript
-- <a href="https://c.tenor.com/Hw0aKasI6B4AAAAC/fast-blazing-fast.gif" target="_blank">Blazing fast</a> builds and HMR through Vite
-- Scene management
-- Automagic asset loading per scene (sounds, spritesheets, textures)
-- Keyboard input handling
+## Instalation 🛠️
 
-## Usage 🛠️
+1. Clone repository `npx degit https://github.com/dmirchev/treasure-vault.git new-folder`
 
-1. Clone repository `npx degit https://github.com/Hafaux/pixi-framework.git new-folder`
-
-2. Navigate to the new directory and install the project dependencies using `npm install`
+2. Navigate to the new directory and Install the project dependencies using `npm install`
 
 ### Commands 💻
 
 | Command           | Description                                                          |
 | ----------------- | -------------------------------------------------------------------- |
-| `npm run start`     | Run dev server                                                       |
+| `npm run start`   | Run dev server                                                       |
 | `npm run build`   | Build project for production                                         |
 | `npm run preview` | Preview production build (must run `build` before running `preview`) |
