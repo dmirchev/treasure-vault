@@ -18,3 +18,36 @@ export function alphaTween(
     },
   });
 }
+
+export function alphaTweenSine(sprite?: Sprite) {
+  if (!sprite) return;
+  sprite.alpha = 1;
+
+  gsap.to(sprite, {
+    alpha: 0,
+    ease: "power1.in",
+    duration: 0.75,
+    repeat: -1,
+    yoyo: true,
+  });
+}
+
+export function rotationTween(
+  startRotation: number,
+  endRotation: number,
+  duration: number,
+  sprite?: Sprite,
+  onComplete?: (() => void) | undefined
+) {
+  if (!sprite) return;
+  sprite.rotation = startRotation;
+
+  gsap.to(sprite, {
+    rotation: endRotation,
+    duration: duration,
+    ease: "power1.out",
+    onComplete: () => {
+      if (onComplete) onComplete();
+    },
+  });
+}

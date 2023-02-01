@@ -74,8 +74,8 @@ export default class Game extends Scene {
     if (
       this.combinationManager?.checkSequence(
         direction,
-        () => this.onCombinationFail(),
-        () => this.onCombinationSuccess()
+        () => this.handle?.startCrazySpin(() => this.onCombinationFail()),
+        () => this.handle?.startCrazySpin(() => this.onCombinationSuccess())
       )
     ) {
       this.handle?.forceStop();

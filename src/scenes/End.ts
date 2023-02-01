@@ -2,7 +2,7 @@ import { Sprite } from "pixi.js";
 import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
 import { Sparkles } from "../prefabs/Sparkles";
-import { alphaTween } from "../utils/animationmisc";
+import { alphaTween, alphaTweenSine } from "../utils/animationmisc";
 import { Debug } from "../utils/debug";
 import {
   centerObjects,
@@ -22,7 +22,8 @@ export default class End extends Scene {
 
   async load() {
     this.bg = Sprite.from("bg");
-    new KeypadDisplayText("NICE", this.bg);
+    const keypad = new KeypadDisplayText("NICE", this.bg);
+    alphaTweenSine(keypad);
 
     centerObjects(this.bg);
     recenterSpritesFullScreen(this.bg);

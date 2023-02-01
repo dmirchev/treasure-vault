@@ -7,6 +7,7 @@ import {
   calculateVector,
   inverseTransform,
 } from "../utils/mathmisc";
+import { rotationTween } from "../utils/animationmisc";
 
 export class Handle extends Sprite {
   private mouse = Mouse.getInstance();
@@ -61,6 +62,7 @@ export class Handle extends Sprite {
     this.pressedPoint = new Point();
 
     this.hasPressed = false;
+    this.interactive = true;
 
     this.accumulatedAngle = 0;
     this.dragAngle = 0;
@@ -83,7 +85,7 @@ export class Handle extends Sprite {
   }
 
   private onActionPress(action: keyof typeof Mouse.actions, position: Point) {
-    if (action == "PRIMARY") {
+    if (action == "PRIMARY" && this.interactive) {
       if (this.hasPressedOnHandle(position, 0.5)) {
         this.hasPressed = true;
         this.setPressedValues(position);
@@ -189,5 +191,28 @@ export class Handle extends Sprite {
   updateHandleRotation(angle: number) {
     this.handle.rotation = angle;
     this.shadow.rotation = angle;
+  }
+
+  public startCrazySpin(callback?: (() => void) | undefined) {
+    this.hasPressed = false;
+    this.interactive = false;
+
+    const crazySpinStartRotation = 2 * (Math.PI * 10);
+    const duration = 1;
+
+    rotationTween(
+      this.handle.rotation - crazySpinStartRotation,
+      0,
+      duration,
+      this.handle,
+      callback
+    );
+
+    rotationTween(
+      this.shadow.rotation - crazySpinStartRotation,
+      0,
+      duration,
+      this.shadow
+    );
   }
 }
