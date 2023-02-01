@@ -4,7 +4,6 @@ import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
 import { Sparkles } from "../prefabs/Sparkles";
 import { alphaTween, alphaTweenSine } from "../utils/animationmisc";
-import { Debug } from "../utils/debug";
 import {
   centerObjects,
   recenterSpriteInParent,
@@ -50,15 +49,16 @@ export default class End extends Scene {
     );
   }
 
+  async unload() {
+    sound.play("close");
+  }
+
   async start() {
     sound.play("win");
   }
 
   onResize() {
-    if (this.bg) {
-      recenterSpritesFullScreen(this.bg);
-      // this.sceneManager.switchScene("Game");
-    }
+    if (this.bg) recenterSpritesFullScreen(this.bg);
   }
 
   update(delta: number) {
