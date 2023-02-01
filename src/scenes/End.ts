@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { Sprite } from "pixi.js";
 import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
@@ -47,6 +48,10 @@ export default class End extends Scene {
         )
       )
     );
+  }
+
+  async start() {
+    sound.play("win");
   }
 
   onResize() {

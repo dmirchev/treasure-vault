@@ -13,6 +13,7 @@ import { alphaTween } from "../utils/animationmisc";
 import { Debug } from "../utils/debug";
 import CombinationManager from "../core/CombinationManager";
 import { Timer } from "../prefabs/Timer";
+import { sound } from "@pixi/sound";
 
 export default class Game extends Scene {
   name = "Game";
@@ -62,11 +63,11 @@ export default class Game extends Scene {
     this.combinationManager = new CombinationManager(1, 1, 9);
     this.timer = new Timer();
 
-
     if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
   }
 
   init() {
+    sound.play("lock");
     this.handle?.Init();
     this.combinationManager?.setSequence();
     this.timer?.resetTime();
@@ -105,6 +106,7 @@ export default class Game extends Scene {
   }
 
   onCombinationSuccess() {
+    sound.play("open");
     alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
   }
 }

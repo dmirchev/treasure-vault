@@ -8,6 +8,7 @@ import {
   inverseTransform,
 } from "../utils/mathmisc";
 import { rotationTween } from "../utils/animationmisc";
+import { sound } from "@pixi/sound";
 
 export class Handle extends Sprite {
   private mouse = Mouse.getInstance();
@@ -142,6 +143,8 @@ export class Handle extends Sprite {
 
           if (this.onSegmentClickCallback)
             this.onSegmentClickCallback(rotaionDirection);
+
+          sound.play("click");
         }
       }
     }
@@ -198,7 +201,7 @@ export class Handle extends Sprite {
     this.interactive = false;
 
     const crazySpinStartRotation = 2 * (Math.PI * 10);
-    const duration = 1;
+    const duration = 3;
 
     rotationTween(
       this.handle.rotation - crazySpinStartRotation,
@@ -214,5 +217,7 @@ export class Handle extends Sprite {
       duration,
       this.shadow
     );
+
+    sound.play("chain");
   }
 }
