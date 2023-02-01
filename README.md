@@ -3,6 +3,7 @@
 ## Tools 🛠️
 - [PixiJS](https://pixijs.com)
 - [Vite⚡](https://vitejs.dev/)
+- [PixiJS Boilerplate](https://github.com/Hafaux/pixi-framework)
 
 ## How to play 🕸
 
