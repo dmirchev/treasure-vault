@@ -47,7 +47,7 @@ export default class Game extends Scene {
     this.bg.addChild(this.door);
     recenterSpriteInParent(this.door, 0.009, -0.012);
 
-    this.handle = new Handle();
+    this.handle = new Handle(() => this.onHandleSegmentClick());
     this.door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
 
@@ -61,7 +61,12 @@ export default class Game extends Scene {
 
   onResize(width: number, height: number) {
     if (this.bg) recenterSpritesFullScreen(this.bg);
-    if (this.door)
-      alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
+  }
+
+  onHandleSegmentClick() {
+    return false;
+    // if (this.door) {
+    //   alphaTween(1, 0, this.door, () => this.sceneManager.switchScene("End"));
+    // }
   }
 }
