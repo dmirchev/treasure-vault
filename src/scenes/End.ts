@@ -1,5 +1,6 @@
 import { sound } from "@pixi/sound";
 import { Sprite } from "pixi.js";
+import config from "../config";
 import Scene from "../core/Scene";
 import KeypadDisplayText from "../prefabs/KeypadDisplayText";
 import { Sparkles } from "../prefabs/Sparkles";
@@ -38,7 +39,7 @@ export default class End extends Scene {
     this.doorOpenShadow.addChild(this.doorOpen);
     recenterSpriteInParent(this.doorOpen, -0.05, -0.02);
 
-    this.goldSparkles = new Sparkles(this.bg, "blink");
+    this.goldSparkles = new Sparkles(this.bg, "blink", config.emitterConfig);
 
     alphaTween(0, 1, this.doorOpenShadow, () =>
       wait(2).then(() =>
