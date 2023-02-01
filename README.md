@@ -1,4 +1,8 @@
-## 🎮 Treasure Vault 2D Game made with [PixiJS](https://pixijs.com) using [Vite⚡](https://vitejs.dev/)
+# 🎮 Treasure Vault 2D Game
+
+## Tools 🛠️
+- [PixiJS](https://pixijs.com)
+- [Vite⚡](https://vitejs.dev/)
 
 ## How to play 🕸
 
@@ -10,7 +14,7 @@
 - You `Win` upon dialing the correct sequence and the Vault door opens
 - You `Lose` when you diale in an incorrect rotation
 
-## Instalation 🛠️
+## Instalation 〰
 
 1. Clone repository `npx degit https://github.com/dmirchev/treasure-vault.git new-folder`
 
