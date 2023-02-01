@@ -12,6 +12,7 @@ import { Handle } from "../prefabs/Handle";
 import { alphaTween } from "../utils/animationmisc";
 import { Debug } from "../utils/debug";
 import CombinationManager from "../core/CombinationManager";
+import { Timer } from "../prefabs/Timer";
 
 export default class Game extends Scene {
   name = "Game";
@@ -25,6 +26,8 @@ export default class Game extends Scene {
   private handle: Handle | undefined;
 
   private combinationManager: CombinationManager | undefined;
+
+  private timer: Timer | undefined;
 
   async load() {
     // await this.utils.assetLoader.loadAssetsGroup("Game");
@@ -56,10 +59,21 @@ export default class Game extends Scene {
     this.door.addChild(this.handle);
     recenterSpriteInParent(this.handle, -0.04, -0.01);
 
-    this.combinationManager = new CombinationManager(3, 1, 9);
-    this.combinationManager.setSequence();
+    this.combinationManager = new CombinationManager(1, 1, 9);
+    this.timer = new Timer();
+
 
     if (this.sceneManager.lastSceneName === "End") alphaTween(0, 1, this.door);
+  }
+
+  init() {
+    this.handle?.Init();
+    this.combinationManager?.setSequence();
+    this.timer?.resetTime();
+  }
+
+  async start() {
+    this.init();
   }
 
   async unload() {
@@ -68,6 +82,10 @@ export default class Game extends Scene {
 
   onResize(width: number, height: number) {
     if (this.bg) recenterSpritesFullScreen(this.bg);
+  }
+
+  update(delta: number) {
+    if (this.keypad) this.keypad.text = this.timer ? this.timer?.getTime() : "";
   }
 
   onHandleSegmentClick(direction: number) {
@@ -83,8 +101,7 @@ export default class Game extends Scene {
   }
 
   onCombinationFail() {
-    this.handle?.Init();
-    this.combinationManager?.setSequence();
+    this.init();
   }
 
   onCombinationSuccess() {
